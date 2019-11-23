@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <title>Collapsible sidebar using Bootstrap 4</title>
+
+        <!-- Bootstrap CSS CDN -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+        <!-- Our Custom CSS -->
+        <link rel="stylesheet" href="/css/style2.css">
+        <!-- Scrollbar Custom CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+        <!-- Data Table -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+        <!-- Font Awesome JS -->
+        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+
+    </head>
+
+    <body>
+
+        <div class="wrapper">
+            <!-- Side Bar  -->
+            <div th:replace="../static/fragments/sidebar::sidebarcoy"></div>
+
+            <!-- Page Content  -->
+            <div id="content">
+
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="container-fluid">
+
+                        <button type="button" id="sidebarCollapse" class="btn btn-info">
+                            <i class="fas fa-align-left"></i>
+                            <!--<span>Toggle Sidebar</span>-->
+                        </button>
+                        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <i class="fas fa-align-justify"></i>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="nav navbar-nav ml-auto">
+                                <li class="nav-item active">
+                                    <a class="nav-link" href="#">Logout</a>
+                                </li>
+                                <!--                                <li class="nav-item">
+                                                                    <a class="nav-link" href="#">Page</a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link" href="#">Page</a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link" href="#">Page</a>
+                                                                </li>-->
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+
+                <!-- DataTales Example -->
+                <div class="container-fluid">
+                    <div class="card-header py-3">
+                        <a href="#" data-target="#addModal" data-toggle="modal" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped " id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Employee</th>
+                                        <th>Name</th>
+                                        <th>Plat Number</th>
+                                        <th>File</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="vehicle : ${vehicles}">
+                                        <td th:text="${vehicle.idVehicle}"></td>
+                                        <td th:text="${vehicle.employee.idEmployee}"></td>
+                                        <td th:text="${vehicle.name}"></td>
+                                        <td th:text="${vehicle.platNumber}"></td>
+                                        <td th:text="${vehicle.file}"></td>
+                                        <td>
+                                            
+                                            <button type="button"  data-target="#updateModal" data-toggle="modal" class="btn btn-warning"><i class="fas fa-user-edit ml-2"></i></button>&nbsp
+<!--                                            <button type="button"  data-target="#deleteModal" data-toggle="modal" class="btn btn-danger"><i class="fas fa-user-times ml-2"></i></button>-->
+                                            <a type="button"  th:href="@{/vehicle/delete/{id}(id=${vehicle.idVehicle})}" class="btn btn-danger"><i class="fas fa-user-times ml-2"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Button Add -->
+        <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <form action="#" th:action="@{vehicle/add}" th:object="${addvehicle}" method="post">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Add Data</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                               
+                                <input value="" type="hidden"  class="form-control" id="idVehicle" name="idVehicle"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Employee Id</label>
+                                <input value="" type="text" class="form-control" id="employee" name="employee"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Name</label>
+                                <input value="" type="text"  class="form-control" id="name" name="name"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Plat Number</label>
+                                <input value="" type="text" class="form-control" id="platNumber" name="platNumber"/>
+                            </div>
+                            <!--                            <div class="form-group">
+                                                            <label for="title">Id</label>
+                                                            <input value="" type="text" class="form-control" id="idVehicle" name="idVehicle"/>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="title">Id</label>
+                                                            <input value="" type="text" class="form-control" id="idVehicle" name="idVehicle"/>
+                                                        </div>-->
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" value="Save" id="addButton" name="button" class="btn btn-primary" onclick="addFunction()"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Modal Button Edit -->
+        <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <form action="#" th:action="@{vehicle/add}" th:object="${addvehicle}" method="post">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Update Data</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                
+                                <input value="0" type="hidden"  class="form-control" id="idVehicleu" name="idVehicle"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Employee Id</label>
+                                <input value="" type="text" class="form-control" id="employeeu" name="employee"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Name</label>
+                                <input value="" type="text"  class="form-control" id="nameu" name="name"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Plat Number</label>
+                                <input value="" type="text" class="form-control" id="platNumberu" name="platNumber"/>
+                            </div>
+                            <!--                            <div class="form-group">
+                                                            <label for="title">Id</label>
+                                                            <input value="" type="text" class="form-control" id="idVehicle" name="idVehicle"/>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="title">Id</label>
+                                                            <input value="" type="text" class="form-control" id="idVehicle" name="idVehicle"/>
+                                                        </div>-->
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" value="Update" id="updateButton" name="button" class="btn btn-primary" onclick="addFunction()"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+<!--         Modal Button Delete 
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <form action="#" th:action="@{vehicle/delete/{id}{id=${vehicle.idVehicle}}}" th:object="${addvehicle}" method="post">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Delete Data</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="title">Id</label>
+                                <input value="" type="text"  class="form-control" id="idVehicled" name="idVehicle"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Employee Id</label>
+                                <input value="" type="text" class="form-control" id="employeed" name="employee"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Name</label>
+                                <input value="" type="text"  class="form-control" id="named" name="name"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Plat Number</label>
+                                <input value="" type="text" class="form-control" id="platNumberd" name="platNumber"/>
+                            </div>
+                                     
+                        <div class="modal-footer">
+                            <input type="submit" value="Delete" id="deleteButton" name="button" class="btn btn-primary" onclick="addFunction()"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>-->
+
+        <!-- jQuery CDN - Slim version (=without AJAX) -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <!-- Popper.JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+        <!-- Bootstrap JS -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+        <!-- jQuery Custom Scroller CDN -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+        <!-- DataTable -->
+        <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+        
+        <script type="text/javascript">
+                                $(document).ready(function () {
+                                    $("#sidebar").mCustomScrollbar({
+                                        theme: "minimal"
+                                    });
+
+                                    $('#sidebarCollapse').on('click', function () {
+                                        $('#sidebar, #content').toggleClass('active');
+                                        $('.collapse.in').toggleClass('in');
+                                        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+                                    });
+                                });
+        </script>
+        <script th:inline="javascript" >
+            $(document).ready(function () {
+                $("#dataTable").on('click', '.btn', function() {
+                    var currentRow = $(this).closest("tr");
+
+                    var Id = currentRow.find("td:eq(0)").text();
+                    var EmpId = currentRow.find("td:eq(1)").text();
+                    var Name = currentRow.find("td:eq(2)").text();
+                    var PlatNumber = currentRow.find("td:eq(3)").text();
+                    var File = currentRow.find("td:eq(4)").text();
+
+
+                    $("#idVehicleu").val(Id);
+                    $("#employeeu").val(EmpId);
+                    $("#nameu").val(Name);
+                    $("#platNumberu").val(PlatNumber);
+                    
+                    $("#idVehicled").val(Id);
+                    $("#employeed").val(EmpId);
+                    $("#named").val(Name);
+                    $("#platNumberd").val(PlatNumber);
+
+
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('#dataTable').DataTable();
+            });
+        </script>
+    </body>
+
+</html>
